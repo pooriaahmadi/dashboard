@@ -1,9 +1,9 @@
 import AppRoute from "../../../classes/AppRoute";
-import test from "../../../middlewares/test";
+import Users from "../../../databases/Users";
 export default new AppRoute({
 	execute: async (request, response) => {
-		response.send("asd");
+		const count: number = await Users.savesCount();
+		response.send(String(count));
 	},
-	middleWares: [test],
 	method: "GET",
 });

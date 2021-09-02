@@ -63,7 +63,7 @@ class Database implements DatabaseModel {
 	}
 	createQuery = (sqlQuery: string) => {
 		return new Promise((resolve, reject) => {
-			this.base.database?.query(sqlQuery, (error, result) => {
+			this.base.db?.query(sqlQuery, (error, result) => {
 				if (error) {
 					reject(error);
 				} else {

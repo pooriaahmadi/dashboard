@@ -1,4 +1,4 @@
-import { VipInputs, VipModel } from "../types";
+import { VipInputs, VipModel } from "../types/Types";
 
 class Vip implements VipModel {
 	id;

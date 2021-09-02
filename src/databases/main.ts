@@ -1,4 +1,4 @@
-import { Base, Database } from "../classes/database";
+import { Base, Database } from "../classes/Database";
 import config from "../config";
 
 const base = new Base(config.databaseConfig);

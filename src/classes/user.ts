@@ -1,15 +1,16 @@
 import {
-	userModelInputs,
-	userModel,
-	discordInformation,
-	userAddInputs,
-} from "../types";
-import Main from "../databases/main";
-import Save from "./save";
+	UserModelInputs,
+	UserModel,
+	DiscordInformation,
+	UserAddInputs,
+} from "../types/Types";
+
+import Main from "../databases/Main";
+import Save from "./Save";
 const mariaDBDate = (date: Date) => {
 	return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getDate()}`;
 };
-class User implements userModel {
+class User implements UserModel {
 	id;
 	discordId;
 	username;
@@ -25,7 +26,7 @@ class User implements userModel {
 		usedCommands,
 		isStaff,
 		vip,
-	}: userModelInputs) {
+	}: UserModelInputs) {
 		this.id = id;
 		this.discordId = discordId;
 		this.username = username;
@@ -93,7 +94,7 @@ class User implements userModel {
 	updateDiscordInformation = async ({
 		username,
 		discriminator,
-	}: discordInformation) => {
+	}: DiscordInformation) => {
 		try {
 			await Main.createQuery(
 				`UPDATE users set username='${username}', discriminator='${discriminator}' WHERE id=${this.id}`
@@ -105,7 +106,7 @@ class User implements userModel {
 			return false;
 		}
 	};
-	add = async ({ title, content, media }: userAddInputs) => {
+	add = async ({ title, content, media }: UserAddInputs) => {
 		const result: any = await Main.createQuery(
 			`INSERT INTO saves (id, user, title, content, media) VALUES (NULL, ${
 				this.id

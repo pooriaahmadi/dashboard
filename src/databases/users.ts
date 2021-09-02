@@ -1,7 +1,7 @@
-import Main from "./main";
-import User from "../classes/user";
+import Main from "./Main";
+import User from "../classes/User";
 import { UserModelInputs, UsersModel, UsersModelInput } from "../types/Types";
-import Vip from "../classes/vip";
+import Vip from "../classes/Vip";
 class Users implements UsersModel {
 	constructor() {}
 	all = async () => {
@@ -123,5 +123,4 @@ class Users implements UsersModel {
 		return result[0]["COUNT(*)"];
 	};
 }
-
 export default new Users();
