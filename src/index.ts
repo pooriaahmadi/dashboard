@@ -9,6 +9,7 @@ import path from "path";
 // Express app
 
 const app = express();
+app.use(express.json());
 fs.readdirSync(path.join(__dirname, "apps")).forEach((dir: string) => {
 	const application: AppModel = require(path.join(
 		__dirname,
