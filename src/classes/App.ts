@@ -9,9 +9,13 @@ class App implements AppModel {
 	constructor({ route }: AppInputs) {
 		this.route = route;
 	}
-	getRoutes = (name: string) => {
+	getRoutes = (name?: string) => {
+		let finalName = this.route;
+		if (name) {
+			finalName = name;
+		}
 		return fs
-			.readdirSync(path.join(__dirname, "..", "apps", name, "routes"))
+			.readdirSync(path.join(__dirname, "..", "apps", finalName, "routes"))
 			.map((item: string) => {
 				return {
 					name: removeExtension(item),
@@ -19,7 +23,7 @@ class App implements AppModel {
 						__dirname,
 						"..",
 						"apps",
-						name,
+						finalName,
 						"routes",
 						item
 					)).default,

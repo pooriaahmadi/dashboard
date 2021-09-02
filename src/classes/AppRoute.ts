@@ -1,9 +1,9 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import { AppRouteInputs, AppRouteModel } from "../types/Types";
 class AppRoute implements AppRouteModel {
 	execute;
-	middleWares;
-	customRoute;
+	middleWares?;
+	customRoute?;
 	method;
 	constructor({ execute, middleWares, customRoute, method }: AppRouteInputs) {
 		this.execute = execute;
@@ -13,6 +13,13 @@ class AppRoute implements AppRouteModel {
 	}
 	getRouter = () => {
 		const Router = express.Router();
+		this.middleWares?.forEach((item) => {
+			Router.use(
+				async (request: Request, response: Response, next: NextFunction) => {
+					return await item.run({ request, response, next });
+				}
+			);
+		});
 		switch (this.method) {
 			case "GET":
 				Router.get("", this.execute);

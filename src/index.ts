@@ -21,9 +21,7 @@ fs.readdirSync(path.join(__dirname, "apps")).forEach((dir: string) => {
 		);
 		app.use(
 			`/${application.route}${item.class.customRoute || item.name}`,
-			async (request, response) => {
-				return await item.class.execute({ request, response });
-			}
+			item.class.getRouter()
 		);
 	});
 });
