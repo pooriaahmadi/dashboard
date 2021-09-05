@@ -1,6 +1,6 @@
 const express = require("express");
 class AppRoute {
-	constructor({ execute, middleWares, customRoute, method }) {
+	constructor({ execute, middleWares = [], customRoute, method }) {
 		this.execute = execute;
 		this.method = method;
 		this.middleWares = middleWares;

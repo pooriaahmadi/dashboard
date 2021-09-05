@@ -9,10 +9,7 @@ class App {
 		this.route = route;
 	}
 	getRoutes = (name) => {
-		let finalName = this.route;
-		if (name) {
-			finalName = name;
-		}
+		const finalName = name || this.route;
 		return fs
 			.readdirSync(path.join(__dirname, "..", "apps", finalName, "routes"))
 			.map((item) => {
@@ -25,9 +22,12 @@ class App {
 						finalName,
 						"routes",
 						item
-					)).default,
+					)),
 				};
 			});
+	};
+	getRouter = (name) => {
+		const finalName = name || this.route;
 	};
 }
 module.exports = App;
