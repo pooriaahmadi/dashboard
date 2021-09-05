@@ -1,22 +1,21 @@
-import { AppInputs, AppModel } from "../types/Types";
-import fs from "fs";
-import path from "path";
-const removeExtension = (str: string) => {
+const fs = require("fs");
+const path = require("path");
+const removeExtension = (str) => {
 	return str.replace(".ts", "").replace(".js", "");
 };
-class App implements AppModel {
+class App {
 	route;
-	constructor({ route }: AppInputs) {
+	constructor({ route }) {
 		this.route = route;
 	}
-	getRoutes = (name?: string) => {
+	getRoutes = (name) => {
 		let finalName = this.route;
 		if (name) {
 			finalName = name;
 		}
 		return fs
 			.readdirSync(path.join(__dirname, "..", "apps", finalName, "routes"))
-			.map((item: string) => {
+			.map((item) => {
 				return {
 					name: removeExtension(item),
 					class: require(path.join(
@@ -31,4 +30,4 @@ class App implements AppModel {
 			});
 	};
 }
-export default App;
+module.exports = App;

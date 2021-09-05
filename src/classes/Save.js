@@ -1,17 +1,12 @@
-import { SaveInputModels, SaveModel } from "../types/Types";
-import Main from "../databases/Main";
-class Save implements SaveModel {
-	id;
-	content;
-	media;
-	title;
-	constructor({ id, content, media, title }: SaveInputModels) {
+const Main = require("../databases/Main");
+class Save {
+	constructor({ id, content, media, title }) {
 		this.id = id;
 		this.content = content;
 		this.media = media;
 		this.title = title;
 	}
-	updateContent = async (newContent: string) => {
+	updateContent = async (newContent) => {
 		await Main.createQuery(
 			Main.resolveUpdateValues({
 				values: {
@@ -22,7 +17,7 @@ class Save implements SaveModel {
 		);
 		this.content = newContent;
 	};
-	updateTitle = async (newTitle: string) => {
+	updateTitle = async (newTitle) => {
 		await Main.createQuery(
 			Main.resolveUpdateValues({
 				values: {
@@ -33,7 +28,7 @@ class Save implements SaveModel {
 		);
 		this.content = newTitle;
 	};
-	updateMedia = async (newMedia: string) => {
+	updateMedia = async (newMedia) => {
 		await Main.createQuery(
 			Main.resolveUpdateValues({
 				values: {
@@ -49,4 +44,4 @@ class Save implements SaveModel {
 	};
 }
 
-export default Save;
+module.exports = Save;

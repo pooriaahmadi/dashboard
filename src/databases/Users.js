@@ -1,14 +1,13 @@
-import Main from "./Main";
-import User from "../classes/User";
-import { UserModelInputs, UsersModel, UsersModelInput } from "../types/Types";
-import Vip from "../classes/Vip";
-class Users implements UsersModel {
+const Main = require("./Main");
+const User = require("../classes/User");
+const Vip = require("../classes/Vip");
+class Users {
 	constructor() {}
 	all = async () => {
-		const users: any = await Main.createQuery(
+		const users = await Main.createQuery(
 			"SELECT users.id, users.discord_id, users.username, users.discriminator, users.used_commands, users.is_staff,vip.id as vip_id, vip.start, vip.end FROM users LEFT JOIN vip on vip.user=users.id"
 		);
-		users.forEach((item: { [key: string]: any }, index: number) => {
+		users.forEach((item, index) => {
 			users[index] = new User({
 				id: item.id,
 				discordId: item.discord_id,
@@ -28,8 +27,8 @@ class Users implements UsersModel {
 		});
 		return users;
 	};
-	getById = async (id: number) => {
-		let user: any = await Main.createQuery(
+	getById = async (id) => {
+		let user = await Main.createQuery(
 			`SELECT users.id, users.discord_id, users.username, users.discriminator, users.used_commands, users.is_staff,vip.id as vip_id, vip.start, vip.end FROM users LEFT JOIN vip on vip.user=users.id WHERE users.id=${id}`
 		);
 		if (user.length) {
@@ -52,8 +51,8 @@ class Users implements UsersModel {
 			});
 		}
 	};
-	getByDiscordId = async (id: string | undefined) => {
-		let user: any = await Main.createQuery(
+	getByDiscordId = async (id) => {
+		let user = await Main.createQuery(
 			`SELECT users.id, users.discord_id, users.username, users.discriminator, users.used_commands, users.is_staff,vip.id as vip_id, vip.start, vip.end FROM users LEFT JOIN vip on vip.user=users.id WHERE discord_id=${id}`
 		);
 		if (user.length) {
@@ -77,10 +76,10 @@ class Users implements UsersModel {
 		}
 	};
 	getStaffs = async () => {
-		const users: any = await Main.createQuery(
+		const users = await Main.createQuery(
 			`SELECT users.id, users.discord_id, users.username, users.discriminator, users.used_commands, users.is_staff,vip.id as vip_id, vip.start, vip.end FROM users LEFT JOIN vip on vip.user=users.id WHERE is_staff=1`
 		);
-		users.forEach((item: { [key: string]: any }, index: number) => {
+		users.forEach((item, index) => {
 			users[index] = new User({
 				id: item.id,
 				discordId: item.discord_id,
@@ -100,8 +99,8 @@ class Users implements UsersModel {
 		});
 		return users;
 	};
-	create = async ({ discordId, username, discriminator }: UserModelInputs) => {
-		const user: any = await Main.createQuery(
+	create = async ({ discordId, username, discriminator }) => {
+		const user = await Main.createQuery(
 			`INSERT INTO users(id, discord_id, username, discriminator, used_commands, is_staff) VALUES (NULL, '${discordId}', '${username}', '${discriminator}', 0, 0)`
 		);
 		return new User({
@@ -115,12 +114,12 @@ class Users implements UsersModel {
 		});
 	};
 	savesCount = async () => {
-		const result: any = await Main.createQuery("SELECT COUNT(*) FROM saves");
+		const result = await Main.createQuery("SELECT COUNT(*) FROM saves");
 		return result[0]["COUNT(*)"];
 	};
 	usersCount = async () => {
-		const result: any = await Main.createQuery("SELECT COUNT(*) FROM users");
+		const result = await Main.createQuery("SELECT COUNT(*) FROM users");
 		return result[0]["COUNT(*)"];
 	};
 }
-export default new Users();
+module.exports = new Users();

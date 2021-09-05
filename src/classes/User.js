@@ -1,23 +1,9 @@
-import {
-	UserModelInputs,
-	UserModel,
-	DiscordInformation,
-	UserAddInputs,
-} from "../types/Types";
-
-import Main from "../databases/Main";
-import Save from "./Save";
-const mariaDBDate = (date: Date) => {
+const Main = require("../databases/Main");
+const Save = require("./Save");
+const mariaDBDate = (date) => {
 	return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getDate()}`;
 };
-class User implements UserModel {
-	id;
-	discordId;
-	username;
-	discriminator;
-	usedCommands;
-	isStaff;
-	vip;
+class User {
 	constructor({
 		id,
 		discordId,
@@ -26,7 +12,7 @@ class User implements UserModel {
 		usedCommands,
 		isStaff,
 		vip,
-	}: UserModelInputs) {
+	}) {
 		this.id = id;
 		this.discordId = discordId;
 		this.username = username;
@@ -35,7 +21,7 @@ class User implements UserModel {
 		this.isStaff = isStaff;
 		this.vip = vip;
 	}
-	makeVip = async (endDate: Date) => {
+	makeVip = async (endDate) => {
 		const currentDate = new Date();
 		if (this.vip) {
 			try {
@@ -91,10 +77,7 @@ class User implements UserModel {
 		}
 		return false;
 	};
-	updateDiscordInformation = async ({
-		username,
-		discriminator,
-	}: DiscordInformation) => {
+	updateDiscordInformation = async ({ username, discriminator }) => {
 		try {
 			await Main.createQuery(
 				`UPDATE users set username='${username}', discriminator='${discriminator}' WHERE id=${this.id}`
@@ -106,8 +89,8 @@ class User implements UserModel {
 			return false;
 		}
 	};
-	add = async ({ title, content, media }: UserAddInputs) => {
-		const result: any = await Main.createQuery(
+	add = async ({ title, content, media }) => {
+		const result = await Main.createQuery(
 			`INSERT INTO saves (id, user, title, content, media) VALUES (NULL, ${
 				this.id
 			}, ${
@@ -122,10 +105,10 @@ class User implements UserModel {
 		});
 	};
 	saves = async () => {
-		const rawSaves: any = await Main.createQuery(
+		const rawSaves = await Main.createQuery(
 			`SELECT * FROM saves WHERE user=${this.id}`
 		);
-		return rawSaves.map((item: { [key: string]: any }) => {
+		return rawSaves.map((item) => {
 			return new Save({
 				id: item.id,
 				content: item.content,
@@ -134,10 +117,8 @@ class User implements UserModel {
 			});
 		});
 	};
-	getSave = async (id: number) => {
-		let result: any = await Main.createQuery(
-			`SELECT * FROM saves WHERE id=${id}`
-		);
+	getSave = async (id) => {
+		let result = await Main.createQuery(`SELECT * FROM saves WHERE id=${id}`);
 		if (result.length) {
 			result = result[0];
 			if (result.user === this.id) {
@@ -151,7 +132,7 @@ class User implements UserModel {
 		}
 		return null;
 	};
-	addUsedCommand = async (value: number) => {
+	addUsedCommand = async (value) => {
 		this.usedCommands += value;
 		await Main.createQuery(
 			Main.resolveUpdateValues({
@@ -163,7 +144,7 @@ class User implements UserModel {
 		);
 	};
 	savesCount = async () => {
-		const result: any = await Main.createQuery(
+		const result = await Main.createQuery(
 			`SELECT COUNT(*) FROM saves WHERE user=${this.id}`
 		);
 		return result[0]["COUNT(*)"];
@@ -172,5 +153,4 @@ class User implements UserModel {
 		await Main.createQuery(`DELETE FROM saves WHERE user=${this.id}`);
 	};
 }
-
-export default User;
+module.exports = User;

@@ -1,21 +1,16 @@
 // Imports
 
-import { AppModel } from "./types/Types";
-import config from "./config";
-import express from "express";
-import fs from "fs";
-import path from "path";
+const config = require("./config");
+const express = require("express");
+const fs = require("fs");
+const path = require("path");
 
 // Express app
 
 const app = express();
 app.use(express.json());
-fs.readdirSync(path.join(__dirname, "apps")).forEach((dir: string) => {
-	const application: AppModel = require(path.join(
-		__dirname,
-		"apps",
-		dir
-	)).default;
+fs.readdirSync(path.join(__dirname, "apps")).forEach((dir) => {
+	const application = require(path.join(__dirname, "apps", dir));
 	application.getRoutes(dir).forEach((item) => {
 		console.log(
 			`Loaded /${application.route}${item.class.customRoute || item.name}`

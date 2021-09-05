@@ -1,10 +1,5 @@
-import { VipInputs, VipModel } from "../types/Types";
-
-class Vip implements VipModel {
-	id;
-	start;
-	end;
-	constructor({ id, start, end }: VipInputs) {
+class Vip {
+	constructor({ id, start, end }) {
 		this.id = id;
 		this.start = new Date(start);
 		this.end = new Date(end);
@@ -17,5 +12,4 @@ class Vip implements VipModel {
 		return false;
 	};
 }
-
-export default Vip;
+module.exports = Vip;

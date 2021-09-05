@@ -9,5 +9,4 @@ const config = {
 		databaseName: "saveeasily",
 	},
 };
-
-export default config;
+module.exports = config;

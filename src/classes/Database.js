@@ -1,25 +1,12 @@
-import mysql, { Connection } from "mysql";
-import {
-	BaseInputsInterface,
-	BaseModel,
-	DatabaseInputs,
-	DatabaseModel,
-	ResolveUpdateValuesInputs,
-} from "../types/Types";
-class Base implements BaseModel {
-	host;
-	port;
-	username;
-	password;
-	databaseName;
-	db?: Connection;
+const mysql = require("mysql");
+class Base {
 	constructor({
 		host = "localhost",
 		port = 3306,
 		username = "root",
 		password = "",
 		databaseName,
-	}: BaseInputsInterface) {
+	}) {
 		this.host = host;
 		this.port = port;
 		this.username = username;
@@ -40,28 +27,27 @@ class Base implements BaseModel {
 	};
 	turnOn = () => {
 		return new Promise((resolve, reject) => {
-			this.db?.connect((err) => {
+			this.db.connect((err) => {
 				return err ? reject(err) : resolve("");
 			});
 		});
 	};
 	turnOff = () => {
-		return this.db?.destroy();
+		return this.db.destroy();
 	};
 	pause = () => {
-		return this.db?.pause();
+		return this.db.pause();
 	};
 	resume = () => {
-		return this.db?.resume();
+		return this.db.resume();
 	};
 }
 
-class Database implements DatabaseModel {
-	base;
-	constructor({ base }: DatabaseInputs) {
+class Database {
+	constructor({ base }) {
 		this.base = base;
 	}
-	createQuery = (sqlQuery: string) => {
+	createQuery = (sqlQuery) => {
 		return new Promise((resolve, reject) => {
 			this.base.db?.query(sqlQuery, (error, result) => {
 				if (error) {
@@ -72,7 +58,7 @@ class Database implements DatabaseModel {
 			});
 		});
 	};
-	resolveUpdateValues = ({ values, table }: ResolveUpdateValuesInputs) => {
+	resolveUpdateValues = ({ values, table }) => {
 		let updateQuery = `UPDATE ${table} SET `;
 		const keys = Object.keys(values);
 		keys.forEach((item, index) => {
@@ -88,4 +74,7 @@ class Database implements DatabaseModel {
 	};
 }
 
-export { Base, Database };
+module.exports = {
+	Base,
+	Database,
+};
