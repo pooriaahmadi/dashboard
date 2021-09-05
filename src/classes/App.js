@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const express = require("express");
 const removeExtension = (str) => {
 	return str.replace(".ts", "").replace(".js", "");
 };
@@ -9,9 +10,8 @@ class App {
 		this.route = route;
 	}
 	getRoutes = (name) => {
-		const finalName = name || this.route;
 		return fs
-			.readdirSync(path.join(__dirname, "..", "apps", finalName, "routes"))
+			.readdirSync(path.join(__dirname, "..", "apps", name, "routes"))
 			.map((item) => {
 				return {
 					name: removeExtension(item),
@@ -19,7 +19,7 @@ class App {
 						__dirname,
 						"..",
 						"apps",
-						finalName,
+						name,
 						"routes",
 						item
 					)),
@@ -27,7 +27,19 @@ class App {
 			});
 	};
 	getRouter = (name) => {
-		const finalName = name || this.route;
+		const router = express.Router();
+		const appRoutes = this.getRoutes(name);
+		router.get("", (request, response) => {
+			return response.json(
+				appRoutes.map((item, index) => {
+					return {
+						id: index,
+						route: item.name || item.class.customRoute,
+					};
+				})
+			);
+		});
+		return router;
 	};
 }
 module.exports = App;

@@ -11,12 +11,20 @@ const app = express();
 app.use(express.json());
 fs.readdirSync(path.join(__dirname, "apps")).forEach((dir) => {
 	const application = require(path.join(__dirname, "apps", dir));
+	app.use(
+		`/${application.route !== undefined ? application.route : dir}`,
+		application.getRouter(dir)
+	);
 	application.getRoutes(dir).forEach((item) => {
 		console.log(
-			`Loaded /${application.route}${item.class.customRoute || item.name}`
+			`Loaded /${application.route !== undefined ? application.route : dir}/${
+				item.class.customRoute || item.name
+			}`
 		);
 		app.use(
-			`/${application.route}${item.class.customRoute || item.name}`,
+			`/${application.route !== undefined ? application.route : dir}/${
+				item.class.customRoute || item.name
+			}`,
 			item.class.getRouter()
 		);
 	});
