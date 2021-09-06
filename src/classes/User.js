@@ -166,6 +166,8 @@ class User {
 				},
 			}) + `WHERE id=${this.id}`
 		);
+		this.token = token;
+		this.refreshToken = refreshToken;
 	};
 }
 module.exports = User;
