@@ -2,13 +2,15 @@
 
 const config = require("./config");
 const express = require("express");
+const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
 
 // Express app
 
 const app = express();
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 fs.readdirSync(path.join(__dirname, "apps")).forEach((dir) => {
 	const application = require(path.join(__dirname, "apps", dir));
 	app.use(

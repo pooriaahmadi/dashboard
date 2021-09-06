@@ -12,6 +12,8 @@ class User {
 		usedCommands,
 		isStaff,
 		vip,
+		token,
+		refreshToken,
 	}) {
 		this.id = id;
 		this.discordId = discordId;
@@ -20,6 +22,8 @@ class User {
 		this.usedCommands = usedCommands;
 		this.isStaff = isStaff;
 		this.vip = vip;
+		this.token = token;
+		this.refreshToken = refreshToken;
 	}
 	makeVip = async (endDate) => {
 		const currentDate = new Date();
@@ -151,6 +155,17 @@ class User {
 	};
 	deleteSaves = async () => {
 		await Main.createQuery(`DELETE FROM saves WHERE user=${this.id}`);
+	};
+	updateToken = async ({ token, refreshToken }) => {
+		await Main.createQuery(
+			Main.resolveUpdateValues({
+				table: "users",
+				values: {
+					token: token,
+					refresh_token: refreshToken,
+				},
+			}) + `WHERE id=${this.id}`
+		);
 	};
 }
 module.exports = User;
