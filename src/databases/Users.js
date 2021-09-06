@@ -55,6 +55,32 @@ class Users {
 			});
 		}
 	};
+	getByToken = async (token) => {
+		let user = await Main.createQuery(
+			`SELECT users.id, users.discord_id, users.username, users.discriminator, users.used_commands, users.is_staff,users.refresh_token, users.token,vip.id as vip_id, vip.start, vip.end FROM users LEFT JOIN vip on vip.user=users.id WHERE users.token='${token}'`
+		);
+		if (user.length) {
+			user = user[0];
+			return new User({
+				id: user.id,
+				discordId: user.discord_id,
+				username: user.username,
+				discriminator: user.discriminator,
+				usedCommands: user.used_commands,
+				isStaff: user.is_staff,
+				vip:
+					"vip_id" in user
+						? new Vip({
+								id: user.vip_id,
+								start: user.start,
+								end: user.end,
+						  })
+						: null,
+				refreshToken: user.refresh_token,
+				token: user.token,
+			});
+		}
+	};
 	getByDiscordId = async (id) => {
 		let user = await Main.createQuery(
 			`SELECT users.id, users.discord_id, users.username, users.discriminator, users.used_commands, users.is_staff,users.refresh_token, users.token,vip.id as vip_id, vip.start, vip.end FROM users LEFT JOIN vip on vip.user=users.id WHERE discord_id=${id}`
