@@ -4,7 +4,7 @@ const axios = require("axios").default;
 const Users = require("../../../databases/Users");
 module.exports = new AppRoute({
 	execute: async (request, response) => {
-		if (!request.params.code)
+		if (!request.query.code)
 			return response.status(400).json({ message: "code is missing" });
 		const data = {
 			client_id: discord.clientId,
