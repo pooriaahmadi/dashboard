@@ -18,11 +18,13 @@ module.exports = new Middleware({
 					response.status(401).json({
 						message: "Token is incorrect.",
 					});
+					return;
 				}
 			}
 		}
 		response.status(400).json({
 			message: "Authorization is missing.",
 		});
+		return;
 	},
 });
