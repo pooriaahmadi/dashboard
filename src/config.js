@@ -14,7 +14,7 @@ const config = {
 		endpoint: "https://discord.com/api/",
 		clientId: process.env.DISCORDCLIENTID,
 		clientSecret: process.env.DISCORDCLIENTSECRET,
-		redirect: `http://${process.env.ENDPOINT}:${process.env.PORT}/discord/return`,
+		redirect: `${process.env.FRONT}/dashboard/return`,
 		botToken: process.env.DISCORDBOTTOKEN,
 	},
 };
