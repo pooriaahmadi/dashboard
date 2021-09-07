@@ -2,6 +2,7 @@ require("dotenv").config();
 const config = {
 	port: parseInt(process.env.PORT),
 	host: process.env.ENDPOINT,
+	front: process.env.FRONT,
 	databaseConfig: {
 		host: process.env.DATABASEHOST,
 		port: parseInt(process.env.DATABASEPORT),

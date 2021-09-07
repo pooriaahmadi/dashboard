@@ -5,10 +5,18 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 
 // Express app
 
 const app = express();
+app.use(
+	cors({
+		origin: config.front,
+		methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+		allowedHeaders: ["authorization", "content-type"],
+	})
+);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 fs.readdirSync(path.join(__dirname, "apps")).forEach((dir) => {
