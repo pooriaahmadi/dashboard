@@ -64,7 +64,7 @@ module.exports = new AppRoute({
 			return response.json(JSON.parse(JSON.stringify(databaseUser)));
 		} catch (error) {
 			console.log(error);
-			return response.json({
+			return response.status(400).json({
 				message: "code expired or server error happened.",
 			});
 		}
