@@ -10,3 +10,7 @@ module.exports.SaveUpdateInputs = Joi.object({
 	content: Joi.string().min(1),
 	media: Joi.string().uri(),
 });
+
+module.exports.SaveDeleteInputs = Joi.object({
+	id: Joi.number().required(),
+});
