@@ -1,10 +1,17 @@
 const express = require("express");
 class AppRoute {
-	constructor({ execute, middleWares = [], customRoute, method }) {
+	constructor({
+		execute,
+		middleWares = [],
+		validations = [],
+		customRoute,
+		method,
+	}) {
 		this.execute = execute;
 		this.method = method;
 		this.middleWares = middleWares;
 		this.customRoute = customRoute;
+		this.validations = validations;
 	}
 	getRouter = () => {
 		const Router = express.Router();
@@ -13,18 +20,36 @@ class AppRoute {
 				return await item.run({ request, response, next });
 			});
 		});
+		const execute = async (request, response) => {
+			for (let i = 0; i < this.validations.length; i++) {
+				if (
+					request.body.constructor === Object &&
+					Object.keys(request.body).length === 0
+				) {
+					return response.status(400).json({
+						message: "Body is required",
+					});
+				}
+				const validate = this.validations[i];
+				const { error } = validate.validate(request.body);
+				if (error) {
+					return response.status(400).json(error);
+				}
+			}
+			await this.execute(request, response);
+		};
 		switch (this.method) {
 			case "GET":
-				Router.get("", this.execute);
+				Router.get("", execute);
 				break;
 			case "PUT":
-				Router.put("", this.execute);
+				Router.put("", execute);
 				break;
 			case "DELETE":
-				Router.delete("", this.execute);
+				Router.delete("", execute);
 				break;
 			case "POST":
-				Router.post("", this.execute);
+				Router.post("", execute);
 				break;
 			default:
 				break;

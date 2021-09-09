@@ -1,19 +1,12 @@
 const AppRoute = require("../../../classes/AppRoute");
 const login = require("../../../middlewares/login");
-const { discord } = require("../../../config");
-const axios = require("axios").default;
 const Main = require("../../../databases/Main");
+const { GuildsInputs } = require("../../../types/types");
 module.exports = new AppRoute({
 	execute: async (request, response) => {
-		const userGuilds = await axios.get(`${discord.endpoint}/users/@me/guilds`, {
-			headers: {
-				Authorization: `Bearer ${request.user.token}`,
-			},
-		});
 		const botGuilds = await Main.createQuery("SELECT * FROM guilds");
-
 		return response.json(
-			userGuilds.data
+			request.body.guilds
 				.filter(
 					(userGuild) =>
 						parseInt(userGuild.permissions) & 0x0000000008 ||
@@ -29,6 +22,7 @@ module.exports = new AppRoute({
 				})
 		);
 	},
-	method: "GET",
+	method: "POST",
 	middleWares: [login],
+	validations: [GuildsInputs],
 });
